@@ -61,13 +61,19 @@ function onSearchForm(e) {
     );
     return;
   }
-
   fetchImages(query, page, perPage)
     .then(data => {
       if (data.totalHits === 0) {
         Notiflix.Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.',
         );
+
+      } else if(data.totalHits < 40) {
+        Notiflix.Notify.failure(
+          "We're sorry, but you've reached the end of search results.",
+        );
+        renderGallery(data.hits);
+        simpleLightBox = new SimpleLightbox('.gallery a').refresh();
       } else {
         renderGallery(data.hits);
         simpleLightBox = new SimpleLightbox('.gallery a').refresh();
